@@ -35,7 +35,7 @@ async function getData(url) {
     console.log(data);
     const citiesData = data._links && data._links["ua:items"];
     if (citiesData && citiesData.length > 0) {
-      const cities = citiesData["ua:items"].map((item) => item.href);
+      const cities = citiesData.map((item) => item.href);
 
       console.log(cities);
 
