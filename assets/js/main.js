@@ -31,19 +31,19 @@ async function getData(url) {
   let options = { method: "GET"};
   await fetch(url, options)
   .then((response) => response.json())
-  
   .then((data) => {
     console.log(data);
-    const cities = data._links["ua:items"].map((item) => item.href);
-    console.log(cities);
+    const citiesData = data._links && data._links["ua:items"];
+    if (citiesData && citiesData.length > 0) {
+      const cities = citiesData["ua:items"].map((item) => item.href);
 
-    if (cities && cities.length > 0) {
+      console.log(cities);
+
       const randomIndex = Math.floor(Math.random() * cities.length);
       city = cities[randomIndex];
     } else {
-      console.error("No cities found in the response.");
+      console.error("No cities found in the response or data structure is not as expected.");
     }
-    
   });
   return fetch(city).then((response) => response.json);
 }
