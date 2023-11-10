@@ -30,17 +30,16 @@ async function getData(url) {
   let city;
   let options = { method: "GET"};
   await fetch(url, options)
-  .then((response) => {
-    return response.json();
-  })
+  .then((response) => response.json())
+  
   .then((data) => {
     console.log(data);
-    const cities = data._links["ua:items"];
+    const cities = data._links["ua:items"].map((item) => item.href);
     console.log(cities);
-    
+
     if (cities && cities.length > 0) {
       const randomIndex = Math.floor(Math.random() * cities.length);
-      city = cities[randomIndex].href;
+      city = cities[randomIndex];
     } else {
       console.error("No cities found in the response.");
     }
