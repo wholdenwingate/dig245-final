@@ -1,2 +1,12 @@
 
 /* css */
+
+#link1, #link2, #link3 {
+    padding-right: 20px;
+}
+#row1 {
+    font-family: 'Bebas Neue', sans-serif;
+}
+#row2, #row3, #row4, #row5 {
+    font-family: 'Brawler', serif;
+}
