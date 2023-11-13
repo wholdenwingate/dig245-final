@@ -42,7 +42,7 @@ async function getData(url) {
       const randomIndex = Math.floor(Math.random() * cities.length);
       city = cities[randomIndex];
     } else {
-      console.error("No cities found in the response or data structure is not as expected.");
+      console.error("No cities found in the response.");
     }
   });
   return fetch(city).then((response) => response.json);
