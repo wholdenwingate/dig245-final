@@ -2,29 +2,37 @@
 /* javascript */
 $(document).ready(function () {
   // inital 
-  let currentCityDetails;
+  let cityDetails;
   $("button:first").click(async function () {
-    currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
-    updateCityDetails();
+    const CityDetails = await getData("https://api.teleport.org/api/urban_areas/");
+    updateCityDetails(cityDetails);
   });
   $("button:last").click(async function () {
     // next
     currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
     updateCityDetails();
   });
-  function updateCityDetails() {
-    $(".row3 h2:nth-child(1)").text(`Population: ${currentCityDetails.population}`);
-    $(".row3 h2:nth-child(2)").text(`Language: ${currentCityDetails.languages[0].language_name}`);
-    $(".row3 h2:nth-child(3)").text(`Currency: ${currentCityDetails.currencies[0].code}`);
+  function updateCityDetails(cityDetails) {
+    $(".row3 h2:nth-child(1)").text(`Population: ${cityDetails.population}`);
+    $(".row3 h2:nth-child(2)").text(`Language: ${cityDetails.language}`);
+    $(".row3 h2:nth-child(3)").text(`Currency: ${cityDetails.currency}`);
 
     $(".row4 h2:nth-child(1)").text(`This City is: ${currentCityDetails.name}`);
     $(".row4 h2:nth-child(2)").text("Score: 0");
 
-    $("#cityImage").attr("src", currentCityDetails.images[0].href);
+    $("#cityImage").attr("src", currentCityDetails.image);
 
-    $("#cityMap").html("City Map Content");
+    $("#map").html("City Map Content");
   }
 })
+
+// map
+var map = L.map('map').setView([51.505, -0.09], 13);
+// set the tileset
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+}).addTo(map);
 
 async function getData(url) {
   let city;
@@ -32,18 +40,42 @@ async function getData(url) {
   await fetch(url, options)
   .then((response) => response.json())
   .then((data) => {
-    console.log(data);
-    const citiesData = data._links && data._links["ua:items"];
+    console.log(data._links);
+    const citiesData = data._links["ua:item"];
     if (citiesData && citiesData.length > 0) {
-      const cities = citiesData.map((item) => item.href);
-
-      console.log(cities);
-
-      const randomIndex = Math.floor(Math.random() * cities.length);
-      city = cities[randomIndex];
+      const randomIndex = Math.floor(Math.random() * citiesData.length);
+      city = citiesData[randomIndex];
+      console.log(city)
     } else {
       console.error("No cities found in the response.");
     }
   });
-  return fetch(city).then((response) => response.json);
+  return fetch(city.href)
+  .then((response) => response.json())
+  
+  .then (data => {
+    console.log(data)
+    const cityData = data._links["ua:details"];
+    console.log(cityData)
+    return fetch(cityData.href)
+  .then ((response) => response.json())
+  .then (dataCity => {
+    console.log(dataCity)
+    const population = dataCity.categories[1].data[0].float_value;
+    const language = dataCity.categories[11].data[2].string_value;
+    const currency = dataCity.categories[5].data[0].string_value;
+    console.log(population, language, currency)
+    return {
+      population,
+      language,
+      currency
+    }
+      
+  })
+  //.then (cityImg => {
+    //const cityImage = data_links["ua:images"];
+    //console.log(cityImage)
+  //})
+  });
+  
 }

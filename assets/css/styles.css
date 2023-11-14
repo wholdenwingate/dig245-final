@@ -10,3 +10,7 @@
 #row2, #row3, #row4, #row5 {
     font-family: 'Brawler', serif;
 }
+#map {
+    height: 200px;
+    width: 300px
+}
