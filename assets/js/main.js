@@ -13,21 +13,28 @@ $(document).ready(function () {
     updateCityDetails();
   });
   function updateCityDetails(cityDetails) {
-    $(".row3 h2:nth-child(1)").text(`Population: ${cityDetails.population}`);
-    $(".row3 h2:nth-child(2)").text(`Language: ${cityDetails.language}`);
-    $(".row3 h2:nth-child(3)").text(`Currency: ${cityDetails.currency}`);
+    const populationElement = document.querySelector(".row3 h2:nth-child(1)");
+    const languageElement = document.querySelector(".row3 h2:nth-child(2)");
+    const currencyElement = document.querySelector(".row3 h2:nth-child(3)");
+    const cityElement =document.querySelector(".row4 h2:nth-child(1)");
+    
+    if (populationElement && languageElement && currencyElement) {
+      populationElement.innerHTML = `Population: ${cityDetails.population}`;
+      languageElement.innerHTML = `Language: ${cityDetails.language}`;
+      currencyElement.innerHTML = `Currency: ${cityDetails.currency}`;
+      cityElement.innerHTML = `This City is: ${cityDetails.name}`;
+    }
+    //$(".row4 h2:nth-child(1)").text(`This City is: ${currentCityDetails.name}`);
+    //$(".row4 h2:nth-child(2)").text("Score: 0");
 
-    $(".row4 h2:nth-child(1)").text(`This City is: ${currentCityDetails.name}`);
-    $(".row4 h2:nth-child(2)").text("Score: 0");
-
-    $("#cityImage").attr("src", currentCityDetails.image);
+    $("#cityImage").attr("src", cityDetails.image);
 
     $("#map").html("City Map Content");
   }
-})
+});
 
 // map
-var map = L.map('map').setView([51.505, -0.09], 13);
+var map = L.map('map').setView([0, 0], 1);
 // set the tileset
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
