@@ -54,4 +54,7 @@ $(document).ready(function () {
     $("#clickToBeginBtn").click(function () {
         fetchRandomCities();
     });
+    $("#nextBtn").click(function () {
+        fetchRandomCities();
+    });
 });

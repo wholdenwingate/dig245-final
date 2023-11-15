@@ -12,7 +12,7 @@ $(document).ready(function () {
     currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
     updateCityDetails();
   });
-  function updateCityDetails(cityDetails) {
+  function updateCityDetails(cityDetails, image) {
     const populationElement = document.querySelector(".row3 h2:nth-child(1)");
     const languageElement = document.querySelector(".row3 h2:nth-child(2)");
     const currencyElement = document.querySelector(".row3 h2:nth-child(3)");
@@ -27,19 +27,11 @@ $(document).ready(function () {
     //$(".row4 h2:nth-child(1)").text(`This City is: ${currentCityDetails.name}`);
     //$(".row4 h2:nth-child(2)").text("Score: 0");
 
-    $("#cityImage").attr("src", cityDetails.image);
+    $("#cityImage").attr("src", image);
 
     $("#map").html("City Map Content");
   }
 });
-
-// map
-var map = L.map('map').setView([0, 0], 1);
-// set the tileset
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; OpenStreetMap'
-}).addTo(map);
 
 async function getData(url) {
   let city;
@@ -52,20 +44,30 @@ async function getData(url) {
     if (citiesData && citiesData.length > 0) {
       const randomIndex = Math.floor(Math.random() * citiesData.length);
       city = citiesData[randomIndex];
-      console.log(city)
+      
     } else {
       console.error("No cities found in the response.");
     }
+    
   });
+  console.log(city)
+  const citySlug = city.name.toLowerCase().replace(/\s+/g, '-');
+  const response2 = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/images/` );
+  const data2 = await response2.json()
+  console.log(data2)
+  const photos = data2.photos[0].image;
+  const image = photos.mobile;
+  console.log(image)
+  //$(`#${cityImage}`).attr("src", image);
   return fetch(city.href)
   .then((response) => response.json())
-  
   .then (data => {
     console.log(data)
     const cityData = data._links["ua:details"];
     console.log(cityData)
     return fetch(cityData.href)
   .then ((response) => response.json())
+  })
   .then (dataCity => {
     console.log(dataCity)
     const population = dataCity.categories[1].data[0].float_value*100000;
@@ -77,12 +79,16 @@ async function getData(url) {
       language,
       currency,
     }
-      
-  })
-  //.then (cityImg => {
-    //const cityImage = data_links["ua:images"];
-    //console.log(cityImage)
-  //})
+
   });
   
 }
+
+
+// map
+var map = L.map('map').setView([0, 0], 1);
+// set the tileset
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+}).addTo(map);
