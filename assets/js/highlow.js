@@ -18,23 +18,26 @@ $(document).ready(function () {
 
     async function fetchCityDetails(cityName, imgId) {
         const citySlug = cityName.toLowerCase().replace(/\s+/g, '-');
-
+        
         try {
             const response = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/details/`);
             const data = await response.json();
+            console.log(data)
+            const response2 = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/images/` );
+            const data2 = await response2.json();
+            console.log(data2)
+            const photos = data2.photos[0].image;
+            console.log(photos)
             
-            const photos = data._links;
-            
-            if (photos) {
                 
-                const image = photos[0].image.web;
+            const image = photos.mobile;
 
-                $(`#${imgId}`).attr("src", image);
+            $(`#${imgId}`).attr("src", image);
 
-                console.log(`${cityName} image: ${image}`);
-            } 
+            console.log(`${cityName} image: ${image}`);
+            
 
-            const population = data.population;
+            const population = data.categories[1].data[0].float_value*100000;
 
             console.log(`${cityName} population: ${population}`);
         } catch (error) {

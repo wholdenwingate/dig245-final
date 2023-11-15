@@ -19,9 +19,9 @@ $(document).ready(function () {
     const cityElement =document.querySelector(".row4 h2:nth-child(1)");
     
     if (populationElement && languageElement && currencyElement) {
-      populationElement.innerHTML = `Population: ${cityDetails.population}`;
-      languageElement.innerHTML = `Language: ${cityDetails.language}`;
-      currencyElement.innerHTML = `Currency: ${cityDetails.currency}`;
+      populationElement.innerHTML = `Population: ${currentCityDetails.population}`;
+      languageElement.innerHTML = `Language: ${currentCityDetails.language}`;
+      currencyElement.innerHTML = `Currency: ${currentCityDetails.currency}`;
       cityElement.innerHTML = `This City is: ${cityDetails.name}`;
     }
     //$(".row4 h2:nth-child(1)").text(`This City is: ${currentCityDetails.name}`);
@@ -68,14 +68,14 @@ async function getData(url) {
   .then ((response) => response.json())
   .then (dataCity => {
     console.log(dataCity)
-    const population = dataCity.categories[1].data[0].float_value;
+    const population = dataCity.categories[1].data[0].float_value*100000;
     const language = dataCity.categories[11].data[2].string_value;
     const currency = dataCity.categories[5].data[0].string_value;
     console.log(population, language, currency)
     return {
       population,
       language,
-      currency
+      currency,
     }
       
   })
