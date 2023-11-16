@@ -2,31 +2,55 @@
 /* javascript */
 $(document).ready(function () {
   // inital 
-  let cityDetails;
+  let currentCityDetails;
+  let score = 0;  
+  let gameStarted = false;
+
   $("button:first").click(async function () {
-    const CityDetails = await getData("https://api.teleport.org/api/urban_areas/");
-    updateCityDetails(cityDetails);
+    currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
+    updateCityDetails(currentCityDetails);
+    gameStarted = true;
+    enableButtons();
   });
+
+  $("#submitGuess").click(function () {
+    if (gameStarted) {
+      const userGuess = document.getElementById("userGuess").value.toLowerCase();
+      const actualCityName = currentCityDetails.name.toLowerCase();
+
+      if (userGuess === actualCityName) {
+        alert("Correct! You earned a point.");
+        score++;
+      } else {
+        alert("Incorrect. Try again!");
+      }
+      document.getElementById("score").innerText = score;
+    }
+  });
+
   $("button:last").click(async function () {
     // next
-    currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
-    updateCityDetails();
+    if (gameStarted) {
+      currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
+      updateCityDetails(currentCityDetails);
+    }
   });
+
+  function enableButtons() {
+    $("#submitGuess").prop("disabled", false);
+    $("button:last").prop("disabled", false);
+}
+
   function updateCityDetails(cityDetails, image) {
-    const populationElement = document.querySelector(".row3 h2:nth-child(1)");
-    const languageElement = document.querySelector(".row3 h2:nth-child(2)");
-    const currencyElement = document.querySelector(".row3 h2:nth-child(3)");
-    const cityElement =document.querySelector(".row4 h2:nth-child(1)");
+    const populationElement = document.querySelector("#population");
+    const languageElement = document.querySelector("#language");
+    const currencyElement = document.querySelector("#currency");
     
     if (populationElement && languageElement && currencyElement) {
-      populationElement.innerHTML = `Population: ${currentCityDetails.population}`;
-      languageElement.innerHTML = `Language: ${currentCityDetails.language}`;
-      currencyElement.innerHTML = `Currency: ${currentCityDetails.currency}`;
-      cityElement.innerHTML = `This City is: ${cityDetails.name}`;
+      populationElement.innerHTML = `Population: ${cityDetails.population}`;
+      languageElement.innerHTML = `Language: ${cityDetails.language}`;
+      currencyElement.innerHTML = `Currency: ${cityDetails.currency}`;
     }
-    //$(".row4 h2:nth-child(1)").text(`This City is: ${currentCityDetails.name}`);
-    //$(".row4 h2:nth-child(2)").text("Score: 0");
-
     $("#cityImage").attr("src", image);
 
     $("#map").html("City Map Content");
@@ -35,53 +59,64 @@ $(document).ready(function () {
 
 async function getData(url) {
   let city;
-  let options = { method: "GET"};
+  let options = { method: "GET" };
   await fetch(url, options)
-  .then((response) => response.json())
-  .then((data) => {
-    console.log(data._links);
-    const citiesData = data._links["ua:item"];
-    if (citiesData && citiesData.length > 0) {
-      const randomIndex = Math.floor(Math.random() * citiesData.length);
-      city = citiesData[randomIndex];
-      
-    } else {
-      console.error("No cities found in the response.");
-    }
-    
-  });
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data._links);
+      const citiesData = data._links["ua:item"];
+      if (citiesData && citiesData.length > 0) {
+        const randomIndex = Math.floor(Math.random() * citiesData.length);
+        city = citiesData[randomIndex];
+
+      } else {
+        console.error("No cities found in the response.");
+      }
+
+    });
   console.log(city)
   const citySlug = city.name.toLowerCase().replace(/\s+/g, '-');
-  const response2 = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/images/` );
+  const response2 = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/images/`);
   const data2 = await response2.json()
   console.log(data2)
   const photos = data2.photos[0].image;
   const image = photos.mobile;
+  document.querySelector("#cityImage").src = image
   console.log(image)
-  //$(`#${cityImage}`).attr("src", image);
+  let population;
+  let language;
+  let currency;
   return fetch(city.href)
-  .then((response) => response.json())
-  .then (data => {
-    console.log(data)
-    const cityData = data._links["ua:details"];
-    console.log(cityData)
-    return fetch(cityData.href)
-  .then ((response) => response.json())
-  })
-  .then (dataCity => {
-    console.log(dataCity)
-    const population = dataCity.categories[1].data[0].float_value*100000;
-    const language = dataCity.categories[11].data[2].string_value;
-    const currency = dataCity.categories[5].data[0].string_value;
-    console.log(population, language, currency)
-    return {
-      population,
-      language,
-      currency,
-    }
+    .then((response) => response.json())
+    .then(data => {
+      console.log(data)
+      const cityData = data._links["ua:details"];
+      console.log(cityData)
+      return fetch(cityData.href)
+        .then((response) => response.json())
+    })
+    .then(dataCity => {
+      console.log(dataCity)
+      
+      for (let i = 0; i < dataCity.categories.length; i++ ) {
+        const category = dataCity.categories[i];
+        if (category.id === 'CITY-SIZE') {
+          population = category.data[0].float_value * 100000;
+        } else if (category.id === 'LANGUAGE'){
+          language = category.data[2].string_value;
+        } else if (category.id === 'ECONOMY') {
+          currency = category.data[0].string_value;
+        }
+      }
+        console.log(population, language, currency)
+      return {
+        population,
+        language,
+        currency,
+      }
 
-  });
-  
+    });
+
 }
 
 
@@ -89,6 +124,6 @@ async function getData(url) {
 var map = L.map('map').setView([0, 0], 1);
 // set the tileset
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; OpenStreetMap'
+  maxZoom: 19,
+  attribution: '&copy; OpenStreetMap'
 }).addTo(map);

@@ -23,8 +23,7 @@
 
     <div class="container">
         <div class="row mb-5" id="row1">
-            <div class="mt-4">
-                <h1 class="text-center"><b>Guess Where?</b></h1>
+            <div class="">
                 <nav class="navbar navbar-expanded-sm justify-content-center" id="navbar">
                     <div class="container">
                         <img src="assets/img/GWlogo.png" alt="Guess Where logo" class="navbar-brand">
@@ -48,14 +47,14 @@
             </div>
         </div>
         <div class="row mb-5" id="row3">
-            <div class="vstack col-xl-3 gap-3">
-                <div class="col align-self-start">
-                    <h2 id="pipulation">Population:</h2>
+            <div class=" col-xl-4 ">
+                <div class="vstack col align-self-start">
+                    <h2 id="population">Population:</h2>
                 </div>
-                <div class="col align-self-start">
-                    <h2 id="language">Language</h2>
+                <div class="vstack col align-self-start">
+                    <h2 id="language">Language:</h2>
                 </div>
-                <div class="col align-self-start">
+                <div class="vstack col align-self-start">
                     <h2 id="currency">Currency:</h2>
                 </div>
             </div>
@@ -67,11 +66,13 @@
         </div>
         <div class="row mb-5" id="row4">
             <div class=" vstack gap-4 col-xl-5">
-                <div class="col-xl-2 align-self-start">
-                    <h2>This City is:</h2>
+                <div class="col-xl-3 align-self-start">
+                    <h2 id="guess">This City is:</h2>
+                    <input type="text" id="userGuess" placeholder="Type your guess">
+                    <button id="submitGuess" class="btn btn-dark mt-2">Submit Guess</button>
                 </div>
-                <div class="col-xl-2 align-self-start">
-                    <h2>Score:</h2>
+                <div class="col-xl-3 align-self-start">
+                    <h2>Score: <span id="score">0</span></h2>
                 </div>
             </div>
             <div class="col-1">
