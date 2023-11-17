@@ -43,6 +43,8 @@ $(document).ready(function () {
             $(`#${imgId}`).attr("alt", cityName);
             $(`#${imgId}`).data("population", population);
 
+            const cityLabelId = `#${imgId.replace("Img", "")}`;
+            $(cityLabelId).html(cityName);
             
 
             console.log(`${cityName} image: ${image}`);
