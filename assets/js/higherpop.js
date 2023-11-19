@@ -28,16 +28,13 @@ $(document).ready(function () {
         try {
             const response = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/details/`);
             const data = await response.json();
-            console.log(data)
 
             const response2 = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/images/` );
             const data2 = await response2.json();
-            console.log(data2)
             const photos = data2.photos[0].image;
-            console.log(photos) 
             const image = photos.mobile;
 
-            const population =   parseFloat($(`#${imgId}`).data("population")) ||data.categories[1].data[0].float_value * 100000;
+            const population =   parseFloat($(`#${imgId}`).data("population")) ||data.categories[1].data[0].float_value;
 
             $(`#${imgId}`).attr("src", image);
             $(`#${imgId}`).attr("alt", cityName);
@@ -45,10 +42,6 @@ $(document).ready(function () {
 
             const cityLabelId = `#${imgId.replace("Img", "")}`;
             $(cityLabelId).html(cityName);
-            
-
-            console.log(`${cityName} image: ${image}`);
-            console.log(`${cityName} population: ${population}`);
 
             $("#nextBtn").prop("disabled", false);
 
@@ -98,6 +91,7 @@ $(document).ready(function () {
     $("#clickToBeginBtn").click(function () {
         fetchRandomCities();
         score = 0;
+        $("#score").text(`Score: ${score}`);
     });
     $("#nextBtn").click(function () {
         if (isGuessMade) {
