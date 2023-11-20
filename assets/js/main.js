@@ -67,11 +67,7 @@ $(document).ready(function () {
   if (latitude !== undefined && longitude !== undefined && guessSubmitted) {
     map.setView([latitude, longitude], 10);
 
-    L.marker([latitude, longitude]).addTo(map)
-      .bindPopup('Guessed Location!')
-      .openPopup();
-
-    $("#map").html(`Latitude: ${latitude}, Longitude: ${longitude}`);
+    
   } else {
     console.error("Latitude or longitude is undefined.");
     }
@@ -120,9 +116,18 @@ $(document).ready(function () {
     }
     $("#cityImage").attr("src", image);
 
+    //latitude = cityDetails.latitude;
+    //longitude = cityDetails.longitude;
+
     if (latitude !== undefined && longitude !== undefined && guessSubmitted) {
-      map.setView([latitude, longitude], 10)
+      map.setView([latitude, longitude], 7)
       $("#map").html(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+      L.marker([latitude, longitude]).addTo(map)
+      .bindPopup('Guessed Location!')
+      .openPopup();
+
+    $("#map").html(`Latitude: ${latitude}, Longitude: ${longitude}`);
     } else {
       console.error("Latitude or longitude is undefined.");
     } 
@@ -131,6 +136,7 @@ $(document).ready(function () {
 
 async function getData(url) {
   let city;
+
   let options = { method: "GET" };
   await fetch(url, options)
     .then((response) => response.json())
@@ -154,6 +160,7 @@ async function getData(url) {
   document.querySelector("#cityImage").src = image
   console.log(image)
 
+  
   let population;
   let language;
   let currency;
@@ -169,6 +176,7 @@ async function getData(url) {
         longitude = data.bounding_box.latlon.east;
         console.log(latitude, longitude)
       }
+      
       const cityData = data._links["ua:details"];
       console.log(cityData)
       cityName = city.name
@@ -182,14 +190,14 @@ async function getData(url) {
       for (let i = 0; i < dataCity.categories.length; i++ ) {
         const category = dataCity.categories[i];
         if (category.id === 'CITY-SIZE') {
-          population = category.data[0].float_value * 100000;
+          population = category.data[0].float_value * 1000000;
         } else if (category.id === 'LANGUAGE'){
           language = category.data[2].string_value;
         } else if (category.id === 'ECONOMY') {
           currency = category.data[0].string_value;
         }
       }
-        console.log(population, language, currency)
+        console.log(population, language, currency, longitude, latitude)
       return {
         population,
         language,

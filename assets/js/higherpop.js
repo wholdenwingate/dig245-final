@@ -1,8 +1,12 @@
 $(document).ready(function () {
     let score = 0;
-    let highScore = 0;
+    let highScore = localStorage.getItem('highScore') || 0;
     let isGuessMade = false;
-
+    function updateScoreDisplay() {
+        $("#score").text(`Score: ${score}`);
+        $("#highscore").text(`High Score: ${highScore}`);
+    }
+    updateScoreDisplay();
     async function fetchRandomCities() {
         try {
 
@@ -68,6 +72,7 @@ $(document).ready(function () {
 
         $("#score").text(`Score: ${score}`);
         $("#highscore").text(`High Score: ${Math.max(score, highScore)}`);
+        localStorage.setItem('highScore', highScore)
     }
 
     function getPopulationFromOtherCity(imgId) {
@@ -100,4 +105,5 @@ $(document).ready(function () {
             alert("Please make a selection first")
         }
     });
+    updateScoreDisplay();
 });
