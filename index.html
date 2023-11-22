@@ -19,7 +19,7 @@
      crossorigin=""></script>
 </head>
 
-<body>
+<body id="body">
 
     <div class="container">
         <div class="row mb-5" id="row1">
@@ -46,8 +46,9 @@
                 <h1>Guess The City</h1>
             </div>
         </div>
+        
         <div class="row mb-5" id="row3">
-            <div class=" col-xl-4 ">
+            <div class="col-xl-4">
                 <div class="vstack col align-self-start">
                     <h2 id="population">Population:</h2>
                 </div>
@@ -57,41 +58,33 @@
                 <div class="vstack col align-self-start">
                     <h2 id="currency">Currency:</h2>
                 </div>
+                <div class="vstack col align-self-start">
+                    <h2 id="lifeExpectancy">Life Expectancy:</h2>
+                </div>
+                <div class="col-xl-5 vstack gap-4 align-self-start">
+                    <form>
+                        <h2 id="guess" class="mt-4">The City is:</h2>
+                        <input type="text" id="userGuess" class="mb-2 mt-3" placeholder="Type your guess">
+                        <button id="submitGuess" class="btn btn-dark mb-5 ">Guess</button>
+                        <button id="nextButton" type="submit" class="text-center btn btn-dark mb-5">Next</button>
+                        <h2>Score: <span id="score">0</span></h2>
+                        <h2>High Score: <span id="highScore">0</span></h2>
+                    </form>
+                </div>
             </div>
-            <div class="col-3">
+            <div class="col-xl-4" id="map">
             </div>
-            <div class="col-xl-5 float-md-end ">
-                <img id="cityImage" src="" alt="City Image">
+            <div class="col-xl-4 rounded">
+                <img class="float-md-end" id="cityImage" src="" alt="City Image">
             </div>
         </div>
         <div class="row mb-5" id="row4">
-            <div class=" vstack gap-4 col-xl-5">
-                <div class="col-xl-4 align-self-start">
-                    <h2 id="guess">This City is:</h2>
-                    <input type="text" id="userGuess" placeholder="Type your guess">
-                    <button id="submitGuess" class="btn btn-dark mt-2">Submit Guess</button>
-                </div>
-                <div class="col-xl-4 align-self-start">
-                    <h2>Score: <span id="score">0</span></h2>
-                    <h2>High Score: <span id="highScore">0</span></h2>
-                </div>
+            <div class="col-xl-5">
             </div>
-            <div class="col-1">
-            </div>
-            <div class="col-xl-4 float-md-end ">
-                <div id="map" class="col-xl-4 float-md-end"></div>
-            </div>
-        </div>
+            <div class="col-xl-2">
 
-        <div class="row mb-5" id="row5">
-            <div class="col-xl-3">
             </div>
-            <div class="col-xl-2">
-                <button id="beginButton" type="submit" class="text-center btn btn-dark mt-3"><h4>Click to Begin</h4></button>
-            </div>
-            <div class="col-xl-2">
-                <button id="nextButton" type="submit" class="text-center btn btn-dark mt-3"><h4>Next</h4></button>
-            </div>
+            
         </div>
     </div>
     

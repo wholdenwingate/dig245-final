@@ -5,7 +5,7 @@ let longitude;
 let initalMapView = true;
 let map;
 
-$(document).ready(function () {
+$(document).ready(async function () {
   // inital 
   map = L.map('map').setView([0, 0], 1);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -21,21 +21,21 @@ $(document).ready(function () {
   let gameStarted = false;
   let guessSubmitted = false;
 
-  $("#beginButton").click(async function () {
-    currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
-    updateCityDetails(currentCityDetails);
-    gameStarted = true;
-    guessSubmitted = false;
-    enableSubmitButton();
-    score = 0;
-    document.getElementById("score").innerText = score;
-  });
+  //$("#beginButton").click(async function () {
+  currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
+  updateCityDetails(currentCityDetails);
+  gameStarted = true;
+  guessSubmitted = false;
+  enableSubmitButton();
+  score = 0;
+  document.getElementById("score").innerText = score;
+  //});
 
   $("#submitGuess").click(function () {
     if (gameStarted && currentCityDetails && !guessSubmitted) {
       const userGuess = document.getElementById("userGuess").value.toLowerCase();
       const actualCityName = currentCityDetails.cityName.toLowerCase();
-
+      disableNextButton();
       if (userGuess === actualCityName) {
         alert("Correct!");
         score++;
@@ -50,11 +50,11 @@ $(document).ready(function () {
           localStorage.setItem('highScore', highScore); 
           $("#highScore").text(`${highScore}`);
         }
-        updateMapView();
+        updateMapView(latitude, longitude, guessSubmitted);
 
       } else {
-        alert("Incorrect! Press 'Begin' to restart.");
-        enableBeginButton();
+        alert("Incorrect! This city is cityName Press Begin to restart.");
+        //enableBeginButton();
         disableNextButton();
         gameStarted = false;
       }
@@ -63,13 +63,11 @@ $(document).ready(function () {
     }
   });
 
-  function updateMapView() {
+  function updateMapView(latitude, longitude, guessSubmitted) {
   if (latitude !== undefined && longitude !== undefined && guessSubmitted) {
-    map.setView([latitude, longitude], 10);
-
-    
+    map.setView([latitude, longitude], 7);
   } else {
-    console.error("Latitude or longitude is undefined.");
+    map.setView([0, 0], 1);
     }
   }
 
@@ -82,6 +80,9 @@ $(document).ready(function () {
       disableNextButton();
       guessSubmitted = false;
       gameStarted = true;
+      initalMapView = true;
+
+      updateMapView(latitude, longitude, guessSubmitted);
     }
   });
 
@@ -97,40 +98,22 @@ $(document).ready(function () {
   function disableNextButton() {
     $("#nextButton").prop("disabled", true);
   }
-  function disableNextButton() {
-    $("#nextButton").prop("disabled", true);
-  }
-  function enableBeginButton() {
-    $("#beginButton").prop("disabled", false);
-  }
+  
 
   function updateCityDetails(cityDetails, image) {
     const populationElement = document.querySelector("#population");
     const languageElement = document.querySelector("#language");
     const currencyElement = document.querySelector("#currency");
+    const lifeExpectancyElement = document.querySelector("#lifeExpectancy");
 
-    if (populationElement && languageElement && currencyElement) {
+    if (populationElement && languageElement && currencyElement && lifeExpectancyElement) {
       populationElement.innerHTML = `Population: ${cityDetails.population}`;
       languageElement.innerHTML = `Language: ${cityDetails.language}`;
       currencyElement.innerHTML = `Currency: ${cityDetails.currency}`;
+      lifeExpectancyElement.innerHTML = `Life Expectancy: ${cityDetails.lifeExpectancy}`;
     }
     $("#cityImage").attr("src", image);
-
-    //latitude = cityDetails.latitude;
-    //longitude = cityDetails.longitude;
-
-    if (latitude !== undefined && longitude !== undefined && guessSubmitted) {
-      map.setView([latitude, longitude], 7)
-      $("#map").html(`Latitude: ${latitude}, Longitude: ${longitude}`);
-
-      L.marker([latitude, longitude]).addTo(map)
-      .bindPopup('Guessed Location!')
-      .openPopup();
-
-    $("#map").html(`Latitude: ${latitude}, Longitude: ${longitude}`);
-    } else {
-      console.error("Latitude or longitude is undefined.");
-    } 
+ 
   }
 });
 
@@ -164,6 +147,7 @@ async function getData(url) {
   let population;
   let language;
   let currency;
+  let lifeExpectancy;
   let cityName;
   
 
@@ -192,12 +176,24 @@ async function getData(url) {
         if (category.id === 'CITY-SIZE') {
           population = category.data[0].float_value * 1000000;
         } else if (category.id === 'LANGUAGE'){
-          language = category.data[2].string_value;
+          for (let j = 0; j < category.data.length; j++) {
+            const lang = category.data[j];
+            if (lang.id ==='SPOKEN-LANGUAGES') {
+              language = lang.string_value;
+            };
+          }
         } else if (category.id === 'ECONOMY') {
           currency = category.data[0].string_value;
+        } else if (category.id === 'INTERNAL') {
+          for (let k = 0; k < category.data.length; k++) {
+            const lifeExpect = category.data[k];
+            if (lifeExpect.id === 'LIFE-EXPECTANCY') {
+              lifeExpectancy = lifeExpect.float_value;
+            }
+          }
         }
       }
-        console.log(population, language, currency, longitude, latitude)
+        console.log(population, language, currency, lifeExpectancy, longitude, latitude)
       return {
         population,
         language,
@@ -205,6 +201,7 @@ async function getData(url) {
         cityName,
         latitude,
         longitude,
+        lifeExpectancy,
       };
     });
 
