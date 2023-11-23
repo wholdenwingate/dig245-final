@@ -60,6 +60,7 @@ $(document).ready(function () {
         
         if(!isNaN(otherPopulation)) {
             if (population > otherPopulation) {
+                alert("Correct!");
                 score++;
             } else {
                 alert("Incorrect");

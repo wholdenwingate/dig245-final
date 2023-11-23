@@ -1,10 +1,10 @@
 
 /* css */
 #body {
-    background-color: dimgrey;
+    background-color: lightgrey;
 }
 #button {
-    background-color: dimgrey;
+    background-color: lightgrey;
 }
 #link1, #link2, #link3 {
     padding-right: 10px;
@@ -22,7 +22,7 @@
     font-family: 'Brawler', serif;
 }
 #map {
-    height: 300px;
+    height: 400px;
     width: 400px
 }
 .img-fluid:hover {
@@ -44,4 +44,7 @@
 }
 a:link {
     text-decoration-line: none;
+}
+.custom-button {
+    width: auto; 
 }

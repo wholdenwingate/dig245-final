@@ -61,21 +61,24 @@
                 <div class="vstack col align-self-start">
                     <h2 id="lifeExpectancy">Life Expectancy:</h2>
                 </div>
-                <div class="col-xl-5 vstack gap-4 align-self-start">
+                <div class="col-xl-6 vstack gap-4 align-self-start">
+                    
+                    <label for="userGuess"><h2 id="guess" class="mt-4">The City is:</h2></label>
+                    <input class="form-control" type="text" id="userGuess" class="mb-2 mt-3" placeholder="Type your guess">
                     <form>
-                        <h2 id="guess" class="mt-4">The City is:</h2>
-                        <input type="text" id="userGuess" class="mb-2 mt-3" placeholder="Type your guess">
-                        <button id="submitGuess" class="btn btn-dark mb-5 ">Guess</button>
-                        <button id="nextButton" type="submit" class="text-center btn btn-dark mb-5">Next</button>
-                        <h2>Score: <span id="score">0</span></h2>
-                        <h2>High Score: <span id="highScore">0</span></h2>
+                        <button id="beginButton" class="btn btn-dark mb-5 custom-button">Begin</button>
+                        <button id="submitGuess" class="btn btn-dark mb-5 custom-button">Guess</button>
+                        <button id="nextButton"  class="text-center btn btn-dark mb-5 custom-button">Next</button>
                     </form>
+
+                    <h2>Score: <span id="score">0</span></h2>
+                    <h2>High Score: <span id="highScore">0</span></h2>                
                 </div>
             </div>
-            <div class="col-xl-4" id="map">
-            </div>
             <div class="col-xl-4 rounded">
-                <img class="float-md-end" id="cityImage" src="" alt="City Image">
+                <img class="" id="cityImage" src="" alt="City Image">
+            </div>
+            <div class="col-xl-4" id="map">
             </div>
         </div>
         <div class="row mb-5" id="row4">

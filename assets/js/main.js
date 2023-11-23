@@ -4,6 +4,7 @@ let latitude;
 let longitude;
 let initalMapView = true;
 let map;
+let score = 0;
 
 $(document).ready(async function () {
   // inital 
@@ -14,77 +15,100 @@ $(document).ready(async function () {
   }).addTo(map);
 
   let currentCityDetails;
-  let score = 0;  
   let highScore = localStorage.getItem('highScore') || 0;
   $("#highScore").text(`${highScore}`);
 
   let gameStarted = false;
   let guessSubmitted = false;
+  disableNextButton();
+  disableSubmitButton();
 
-  //$("#beginButton").click(async function () {
-  currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
-  updateCityDetails(currentCityDetails);
-  gameStarted = true;
-  guessSubmitted = false;
-  enableSubmitButton();
-  score = 0;
-  document.getElementById("score").innerText = score;
-  //});
-
-  $("#submitGuess").click(function () {
-    if (gameStarted && currentCityDetails && !guessSubmitted) {
-      const userGuess = document.getElementById("userGuess").value.toLowerCase();
-      const actualCityName = currentCityDetails.cityName.toLowerCase();
-      disableNextButton();
-      if (userGuess === actualCityName) {
-        alert("Correct!");
-        score++;
-        disableSubmitButton();
-        enableNextButton();
-        gameStarted = false;
-        guessSubmitted = true;
-        initalMapView = false;
-
-        if (score > highScore) {
-          highScore = score;
-          localStorage.setItem('highScore', highScore); 
-          $("#highScore").text(`${highScore}`);
-        }
-        updateMapView(latitude, longitude, guessSubmitted);
-
-      } else {
-        alert("Incorrect! This city is cityName Press Begin to restart.");
-        //enableBeginButton();
-        disableNextButton();
-        gameStarted = false;
-      }
-      document.getElementById("score").innerText = score;
-    
-    }
-  });
-
-  function updateMapView(latitude, longitude, guessSubmitted) {
-  if (latitude !== undefined && longitude !== undefined && guessSubmitted) {
-    map.setView([latitude, longitude], 7);
-  } else {
-    map.setView([0, 0], 1);
-    }
+  function enableInput () {
+    $("#userGuess").prop("disabled", false);
   }
 
-  $("#nextButton").click(async function () {
-    // next
-    if (!gameStarted && guessSubmitted) {
-      currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
-      updateCityDetails(currentCityDetails);
-      enableSubmitButton();
-      disableNextButton();
-      guessSubmitted = false;
-      gameStarted = true;
-      initalMapView = true;
-
-      updateMapView(latitude, longitude, guessSubmitted);
+  $("#userGuess").keypress(function (e) {
+    if (e.which === 13) {
+      $("#submitGuess").click();
     }
   });
+
+  async function startNewGame() {
+    enableInput();
+    currentCityDetails = await getData("https://api.teleport.org/api/urban_areas/");
+    updateCityDetails(currentCityDetails);
+    gameStarted = true;
+    guessSubmitted = false;
+    initalMapView = true;
+    enableSubmitButton();
+    disableNextButton();
+    disableBeginButton();
+    document.getElementById("score").innerText = score;
+  }
+
+  $("#beginButton").click(async function (event) {
+    event.preventDefault();
+    startNewGame();
+    score = 0;
+    clearInput();
+  });
+  
+  $("#submitGuess").click(function () {
+    if (gameStarted && currentCityDetails && !guessSubmitted) {
+      handleGuess();
+    }
+  });
+
+  $("#nextButton").click(async function () {
+    if (gameStarted && guessSubmitted) {
+      startNewGame();
+      updateMapView(0, 0, initalMapView);
+      clearInput();
+    }
+    document.getElementById("score").innerText = score;
+  });
+
+  $("form").submit(function (event) {
+    event.preventDefault();
+    $("#submitGuess").click();
+    return false;
+  });
+  
+  function clearInput() {
+    $("#userGuess").val("");
+  }
+
+  function handleGuess () {
+    const userGuess = document.getElementById("userGuess").value.toLowerCase();
+    const actualCityName = currentCityDetails.cityName.toLowerCase();
+
+    if (userGuess === actualCityName) {
+      alert("Correct!");
+      score++;
+      disableSubmitButton();
+      enableNextButton();
+      disableBeginButton();
+      gameStarted = true;
+      guessSubmitted = true;
+      initalMapView = false;
+
+
+      if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('highScore', highScore); 
+        $("#highScore").text(`${highScore}`);    
+      }
+      updateMapView(latitude, longitude, guessSubmitted);
+    } else {
+      alert(`Incorrect! This city is ${actualCityName}. Press Begin to restart.`);
+      enableBeginButton();
+      disableSubmitButton();
+      disableNextButton();
+      gameStarted = false;
+    }
+    document.getElementById("score").innerText = score;
+  }
+  
 
   function enableSubmitButton() {
     $("#submitGuess").prop("disabled", false);
@@ -97,6 +121,12 @@ $(document).ready(async function () {
   }
   function disableNextButton() {
     $("#nextButton").prop("disabled", true);
+  }
+  function disableBeginButton() {
+    $("#beginButton").prop("disabled", true)
+  }
+  function enableBeginButton() {
+    $("#beginButton").prop("disabled", false)
   }
   
 
@@ -119,12 +149,10 @@ $(document).ready(async function () {
 
 async function getData(url) {
   let city;
-
   let options = { method: "GET" };
   await fetch(url, options)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data._links);
       const citiesData = data._links["ua:item"];
       if (citiesData && citiesData.length > 0) {
         const randomIndex = Math.floor(Math.random() * citiesData.length);
@@ -133,15 +161,12 @@ async function getData(url) {
         console.error("No cities found in the response.");
       }
     });
-  console.log(city)
   const citySlug = city.name.toLowerCase().replace(/\s+/g, '-');
   const response2 = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/images/`);
   const data2 = await response2.json()
-  console.log(data2)
   const photos = data2.photos[0].image;
   const image = photos.mobile;
   document.querySelector("#cityImage").src = image
-  console.log(image)
 
   
   let population;
@@ -154,23 +179,16 @@ async function getData(url) {
   return fetch(city.href)
     .then((response) => response.json())
     .then(data => {
-      console.log(data)
       if (data.bounding_box && data.bounding_box.latlon) {
         latitude = data.bounding_box.latlon.north;
         longitude = data.bounding_box.latlon.east;
-        console.log(latitude, longitude)
       }
-      
       const cityData = data._links["ua:details"];
-      console.log(cityData)
       cityName = city.name
       return fetch(cityData.href)
         .then((response) => response.json())
     })
     .then(dataCity => {
-      console.log(dataCity)
-      
-      
       for (let i = 0; i < dataCity.categories.length; i++ ) {
         const category = dataCity.categories[i];
         if (category.id === 'CITY-SIZE') {
@@ -193,7 +211,6 @@ async function getData(url) {
           }
         }
       }
-        console.log(population, language, currency, lifeExpectancy, longitude, latitude)
       return {
         population,
         language,
@@ -204,6 +221,11 @@ async function getData(url) {
         lifeExpectancy,
       };
     });
-
 }
-
+function updateMapView(latitude, longitude, guessSubmitted) {
+  if (latitude !== undefined && longitude !== undefined && guessSubmitted) {
+    map.setView([latitude, longitude], 7);
+  } else {
+    map.setView([0, 0], 1);
+  }
+}
