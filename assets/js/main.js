@@ -137,10 +137,10 @@ $(document).ready(async function () {
     const lifeExpectancyElement = document.querySelector("#lifeExpectancy");
 
     if (populationElement && languageElement && currencyElement && lifeExpectancyElement) {
-      populationElement.innerHTML = `Population: ${cityDetails.population}`;
-      languageElement.innerHTML = `Language: ${cityDetails.language}`;
-      currencyElement.innerHTML = `Currency: ${cityDetails.currency}`;
-      lifeExpectancyElement.innerHTML = `Life Expectancy: ${cityDetails.lifeExpectancy}`;
+      populationElement.innerHTML = `<strong>Population:</strong> ${cityDetails.population}`;
+      languageElement.innerHTML = `<strong>Language:</strong> ${cityDetails.language}`;
+      currencyElement.innerHTML = `<strong>Currency:</strong> ${cityDetails.currency}`;
+      lifeExpectancyElement.innerHTML = `<strong>Life Expectancy:</strong> ${cityDetails.lifeExpectancy}`;
     }
     $("#cityImage").attr("src", image);
  
@@ -192,19 +192,29 @@ async function getData(url) {
       for (let i = 0; i < dataCity.categories.length; i++ ) {
         const category = dataCity.categories[i];
         if (category.id === 'CITY-SIZE') {
-          population = category.data[0].float_value * 1000000;
-        } else if (category.id === 'LANGUAGE'){
           for (let j = 0; j < category.data.length; j++) {
-            const lang = category.data[j];
+            pop = category.data[j];
+            if (pop.id === 'POPULATION-SIZE') {
+              population = category.data[0].float_value * 1000000;
+            }
+          }
+        } else if (category.id === 'LANGUAGE'){
+          for (let k = 0; k < category.data.length; k++) {
+            const lang = category.data[k];
             if (lang.id ==='SPOKEN-LANGUAGES') {
               language = lang.string_value;
-            };
+            }
           }
         } else if (category.id === 'ECONOMY') {
-          currency = category.data[0].string_value;
+          for (let m = 0; m < category.data.length; m++ ) {
+            money = category.data[m];
+            if (money.id === 'CURRENCY-URBAN-AREA') {
+              currency = category.data[0].string_value;
+            }
+          }
         } else if (category.id === 'INTERNAL') {
-          for (let k = 0; k < category.data.length; k++) {
-            const lifeExpect = category.data[k];
+          for (let n = 0; n < category.data.length; n++) {
+            const lifeExpect = category.data[n];
             if (lifeExpect.id === 'LIFE-EXPECTANCY') {
               lifeExpectancy = lifeExpect.float_value;
             }

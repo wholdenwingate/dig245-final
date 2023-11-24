@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>dig245-final</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,18 +19,33 @@
     <div class="container">
         <div class="row mb-5" id="row1">
             <div class="">
-                <nav class="navbar navbar-expanded-sm justify-content-center" id="navbar">
+                <nav class="navbar navbar-expand-md justify-content-center" id="navbar">
                     <div class="container">
                         <img src="assets/img/GWlogo.png" alt="Guess Where logo" class="navbar-brand">
-                        <h4 id="link1">
-                            <a href="index.html">Guess The City</a>
-                        </h4>
-                        <h4 id="link2">
-                            <a href="higher-population.html">Higher Population</a>
-                        </h4>
-                        <h4 id="link3">
-                            <a href="about.html">About</a>
-                        </h4>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="index.html">
+                                        <h4>Guess The City</h4>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="higher-population.html">
+                                        <h4>Higher Population</h4>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="about.html">
+                                        <h4>About</h4>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -37,38 +54,32 @@
         <div class="row mb-5" id="row2">
             <div class="col-xl-12">
                 <h1 class="text-center">
-                    Which Urban Area has a higher population?
+                    <b>Which Urban Area has a higher population?</b>
                 </h1>
             </div>
         </div>
 
         <div class="row mb-5" id="game-container">
-            
-                <div class="col-xl-5">
-                    <button class="image-button border-0" id="button"><img src="" alt="City 1" class="img-fluid" id="city1Img" data-population="" ></button>
-                </div>
-                <div class="col-xl-2">
-                    <h1 class="text-center">
-                        or
-                    </h1>
-                </div>
-                <div class="col-xl-5">
-                    <button class="image-button border-0" id="button"><img src="" alt="City 2" class="img-fluid" id="city2Img" data-population=""></button>
-                </div>
+            <div class="col-xl-5 col-md-5">
+                <button class="image-button border-0" id="button">
+                    <img src="" alt="City 1" class="img-fluid" id="city1Img" data-population="">
+                </button>
+                <h2 class="text-center" id="city1"></h2>
+            </div>
+            <div class="col-xl-2 col-md-2">
+                <h1 class="text-center">
+                    or
+                </h1>
+            </div>
+            <div class="col-xl-5 col-md-5">
+                <button class="image-button border-0" id="button">
+                    <img src="" alt="City 2" class="img-fluid" id="city2Img" data-population="">
+                </button>
+                <h2 class="text-center" id="city2"></h2>
+            </div>
         </div>
 
-        <div class="row" id="row4">
-            <div class="col-xl-5">
-                <h2 class="text-center" id="city1"> 
-                </h2>
-            </div>
-            <div class="col-xl-2">
-            </div>
-            <div class="col-xl-5">
-                <h2 class="text-center" id="city2">
-                </h2>
-            </div>
-        </div>
+    
 
         <div class="row" id="row5">
             <div class="col-xl-3">
@@ -84,16 +95,23 @@
         <div class="row" id="row6">
             <div class="col-xl-2">
             </div>
-            <div class="col-xl-2 col-sm-2 col-5">
-                <button id="clickToBeginBtn" type="submit" class="text-center btn btn-dark mt-3"><h4>Click to Begin</h4></button>
+            <div class="col-xl-2 col-5">
+                <button id="clickToBeginBtn" type="submit" class="text-center btn btn-dark mt-3">
+                    <h4>Begin</h4>
+                </button>
             </div>
             <div class="col-xl-3 col-2"></div>
             <div class="col-xl-2 col-5">
-                <button id="nextBtn" type="submit" class="text-center btn btn-dark mt-3"><h4>Next</h4></button>
+                <button id="nextBtn" type="submit" class="text-center btn btn-dark mt-3">
+                    <h4>Next</h4>
+                </button>
             </div>
         </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-    <script src="assets/js/higherpop.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+        <script src="assets/js/higherpop.js"></script>
 </body>
+
 </html>

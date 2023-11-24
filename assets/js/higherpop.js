@@ -3,8 +3,8 @@ $(document).ready(function () {
     let highScore = localStorage.getItem('highScore') || 0;
     let isGuessMade = false;
     function updateScoreDisplay() {
-        $("#score").text(`Score: ${score}`);
-        $("#highscore").text(`High Score: ${highScore}`);
+        $("#score").html(`<strong>Score:</strong> ${score}`);
+        $("#highscore").html(`<strong>High Score:</strong> ${highScore}`);
     }
     updateScoreDisplay();
     async function fetchRandomCities() {
@@ -33,12 +33,19 @@ $(document).ready(function () {
             const response = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/details/`);
             const data = await response.json();
 
+            const citySizeCategory = data.categories.find(category => category.id === 'CITY-SIZE');
+            if (citySizeCategory) {
+                const populationData = citySizeCategory.data.find(data => data.id === 'POPULATION-SIZE');
+                if (populationData) {
+                    population = populationData.float_value * 1000000;
+                }
+            }
+
             const response2 = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/images/` );
             const data2 = await response2.json();
             const photos = data2.photos[0].image;
             const image = photos.mobile;
 
-            const population =   parseFloat($(`#${imgId}`).data("population")) ||data.categories[1].data[0].float_value;
 
             $(`#${imgId}`).attr("src", image);
             $(`#${imgId}`).attr("alt", cityName);
@@ -70,8 +77,8 @@ $(document).ready(function () {
         
         highScore = Math.max(score, highScore);
 
-        $("#score").text(`Score: ${score}`);
-        $("#highscore").text(`High Score: ${Math.max(score, highScore)}`);
+        $("#score").html(`<strong>Score:</strong> ${score}`);
+        $("#highscore").html(`<strong>High Score:</strong> ${Math.max(score, highScore)}`);
         localStorage.setItem('highScore', highScore)
     }
 
@@ -96,7 +103,7 @@ $(document).ready(function () {
     $("#clickToBeginBtn").click(function () {
         fetchRandomCities();
         score = 0;
-        $("#score").text(`Score: ${score}`);
+        $("#score").html(`<strong>Score:</strong> ${score}`);
     });
     $("#nextBtn").click(function () {
         if (isGuessMade) {
