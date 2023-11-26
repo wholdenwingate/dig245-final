@@ -9,7 +9,7 @@ $(document).ready(function () {
     updateScoreDisplay();
     async function fetchRandomCities() {
         try {
-
+        
             $("#nextBtn").prop("disabled", true);
             isGuessMade = false;
 
@@ -37,7 +37,7 @@ $(document).ready(function () {
             if (citySizeCategory) {
                 const populationData = citySizeCategory.data.find(data => data.id === 'POPULATION-SIZE');
                 if (populationData) {
-                    population = populationData.float_value * 1000000;
+                    population = populationData.float_value;
                 }
             }
 
