@@ -22,7 +22,7 @@ $(document).ready(async function () {
   disableNextButton();
   disableSubmitButton();
 
-  function enableInput () {
+  function enableInput() {
     $("#userGuess").prop("disabled", false);
   }
 
@@ -51,7 +51,7 @@ $(document).ready(async function () {
     score = 0;
     clearInput();
   });
-  
+
   $("#submitGuess").click(function () {
     if (gameStarted && currentCityDetails && !guessSubmitted) {
       handleGuess();
@@ -72,12 +72,12 @@ $(document).ready(async function () {
     $("#submitGuess").click();
     return false;
   });
-  
+
   function clearInput() {
     $("#userGuess").val("");
   }
 
-  function handleGuess () {
+  function handleGuess() {
     const userGuess = document.getElementById("userGuess").value.toLowerCase();
     const actualCityName = currentCityDetails.cityName.toLowerCase();
 
@@ -94,8 +94,8 @@ $(document).ready(async function () {
 
       if (score > highScore) {
         highScore = score;
-        localStorage.setItem('highScore', highScore); 
-        $("#highScore").text(`${highScore}`);    
+        localStorage.setItem('highScore', highScore);
+        $("#highScore").text(`${highScore}`);
       }
       updateMapView(latitude, longitude, guessSubmitted);
     } else {
@@ -107,7 +107,7 @@ $(document).ready(async function () {
     }
     document.getElementById("score").innerText = score;
   }
-  
+
 
   function enableSubmitButton() {
     $("#submitGuess").prop("disabled", false);
@@ -127,7 +127,7 @@ $(document).ready(async function () {
   function enableBeginButton() {
     $("#beginButton").prop("disabled", false)
   }
-  
+
 
   function updateCityDetails(cityDetails, image) {
     const populationElement = document.querySelector("#population");
@@ -142,7 +142,7 @@ $(document).ready(async function () {
       lifeExpectancyElement.innerHTML = `<strong>Life Expectancy:</strong> ${cityDetails.lifeExpectancy}`;
     }
     $("#cityImage").attr("src", image);
- 
+
   }
 });
 
@@ -167,13 +167,13 @@ async function getData(url) {
   const image = photos.mobile;
   document.querySelector("#cityImage").src = image
 
-  
+
   let population;
   let language;
   let currency;
   let lifeExpectancy;
   let cityName;
-  
+
 
   return fetch(city.href)
     .then((response) => response.json())
@@ -188,7 +188,7 @@ async function getData(url) {
         .then((response) => response.json())
     })
     .then(dataCity => {
-      for (let i = 0; i < dataCity.categories.length; i++ ) {
+      for (let i = 0; i < dataCity.categories.length; i++) {
         const category = dataCity.categories[i];
         if (category.id === 'CITY-SIZE') {
           for (let j = 0; j < category.data.length; j++) {
@@ -197,15 +197,15 @@ async function getData(url) {
               population = category.data[0].float_value * 1000000;
             }
           }
-        } else if (category.id === 'LANGUAGE'){
+        } else if (category.id === 'LANGUAGE') {
           for (let k = 0; k < category.data.length; k++) {
             const lang = category.data[k];
-            if (lang.id ==='SPOKEN-LANGUAGES') {
+            if (lang.id === 'SPOKEN-LANGUAGES') {
               language = lang.string_value;
             }
           }
         } else if (category.id === 'ECONOMY') {
-          for (let m = 0; m < category.data.length; m++ ) {
+          for (let m = 0; m < category.data.length; m++) {
             money = category.data[m];
             if (money.id === 'CURRENCY-URBAN-AREA') {
               currency = category.data[0].string_value;
@@ -238,112 +238,72 @@ function updateMapView(latitude, longitude, guessSubmitted) {
     map.setView([0, 0], 1);
   }
 }
-let autoComplete;
-autoComplete.exports = {
-  autoComplete: tarekraafat/autocomplete.js
-}
-const autoCompleteJS = new autoComplete({
-//selector: "#autoComplete",
-  data: {
-    src: async() => {
-      try {
-        document
-          .getElementById("userGuess")
-          .setAttribute("placeholder","Loading..." )
-        const source = await fetch("https://api.teleport.org/api/urban_areas");
-        const data = await source.json();
-        document
-          .getElementById("userGuess")
-          .setAttribute("userGuess", autoCompleteJS.placeHolder);
-          return data;
+
+document.addEventListener('DOMContentLoaded', function() {
+  const autoCompleteJS = new autoComplete({
+    selector: "#userGuess",
+    data: {
+      src: async () => {
+        try {
+          document.getElementById("userGuess").setAttribute("placeholder", "Loading...")
+          const source = await fetch("https://api.teleport.org/api/urban_areas");
+          const data = await source.json();
+          document.getElementById("userGuess").setAttribute("placeholder", "Type your guess...");
+          return data._links["ua:item"];
         } catch (error) {
           return error;
         }
+      },
+      keys: ["name"],
+      cache: true,
+      filter: (list) => {
+        return list;
+      }
     },
-    keys: ["name"],
-    cache: true,
-    filter: (list) => {
-      const filteredResults = Array.from(
-        new Set(list.map((value) => value.match))
-      ).map((name) => {
-        return list.find((value) => value.match === name);
-      });
-      return filteredResults;
-    }
-  },
-  placeHolder: "Type your guess...",
-  resultsList: {
-    element: (list, data) => {
-      const info = document.createElement("p");
-      if (data.results.length > 0) {
-        info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
-      } else {
-        info.innerHTML = `Found <strong>${data.matches.length}</strong> matching results for <strong>"${data.query}"</strong>`;
-    }
-    list.prepend(info);
-  },
-  resultItem: {
-    element: (item, data) => {
-      item.style = "display: flex; justify-content: space-between;";
-      item.innerHTML = `
-      <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
-        ${data.match}
-      </span>
-      <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase; color: rgba(0,0,0,.2);">
-        ${data.key}
-      </span>`;
+    placeHolder: "Type your guess...",
+    resultsList: {
+      element: (list, data) => {
+        const info = document.createElement("p");
+        if (data.results.length > 0) {
+          info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
+        } else {
+          info.innerHTML = `Found <strong>${data.matches.length}</strong> matching results for <strong>"${data.query}"</strong>`;
+        }
+        list.prepend(info);
+      },
+      resultItem: {
+        element: (item, data) => {
+          item.style = "display: flex; justify-content: space-between;";
+          item.innerHTML = `
+        <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+          ${data.match}
+        </span>
+        <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase; color: rgba(0,0,0,.2);">
+          ${data.key}
+        </span>`;
+        },
+        highlight: true
+      }
     },
-    highlight: true
-  },
-  events: {
-    input: {
-      focus: () => {
-        if (autoCompleteJS.input.value.length) autoCompleteJS.start();
+    events: {
+      input: {
+        focus: () => {
+          if (autoCompleteJS.input.value.length) autoCompleteJS.start();
+        }
       }
     }
-  }
-  }
+    });
+    autoCompleteJS.input.addEventListener("selection", function (event) {
+      const feedback = event.detail;
+      autoCompleteJS.input.blur();
+      // Prepare User's Selected Value
+      const selection = feedback.selection.value[feedback.selection.key];
+      // Render selected choice to selection div
+      document.querySelector("#userGuess").innerHTML = selection;
+      // Replace Input value with the selected value
+      autoCompleteJS.input.value = selection;
+      // Console log autoComplete data feedback
+      
+    });
 });
-autoCompleteJS.input.addEventListener("selection", function (event) {
-  const feedback = event.detail;
-  autoCompleteJS.input.blur();
-  const selection = feedback.selection.value[feedback.selection.key];
-  // Render selected choice to selection div
-  document.querySelector(".selection").innerHTML = selection;
-  // Replace Input value with the selected value
-  autoCompleteJS.input.value = selection;
-  // Console log autoComplete data feedback
-  console.log(feedback);
-});
 
-
-// Blur/unBlur page elements
-const action = (action) => {
-  const title = document.querySelector("h1");
-  const mode = document.querySelector(".mode");
-  const selection = document.querySelector(".selection");
-  const footer = document.querySelector(".footer");
-
-  if (action === "dim") {
-    title.style.opacity = 1;
-    mode.style.opacity = 1;
-    selection.style.opacity = 1;
-  } else {
-    title.style.opacity = 0.3;
-    mode.style.opacity = 0.2;
-    selection.style.opacity = 0.1;
-  }
-};
-
-// Blur/unBlur page elements on input focus
-["focus", "blur"].forEach((eventType) => {
-  autoCompleteJS.input.addEventListener(eventType, () => {
-    // Blur page elements
-    if (eventType === "blur") {
-      action("dim");
-    } else if (eventType === "focus") {
-      // unBlur page elements
-      action("light");
-    }
-  });
-});
