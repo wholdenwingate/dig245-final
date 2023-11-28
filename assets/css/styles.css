@@ -16,9 +16,9 @@
     align-items: center;
 }
 #row1 {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: 'Raleway', sans-serif;
     border-radius: 25px;
-    background-color: #dc1a21;
+    background-color: #95A1F1;
     color: black;
 }
 #row2, #game-container, #row3, #row4, #row5 {
@@ -47,7 +47,7 @@
 #userGuess {
     border-radius: 5px;
     padding-bottom: 8px;
-    max-width: 300px; 
+    max-width: 250px; 
 }
 a:link {
     text-decoration: none;
@@ -60,7 +60,7 @@ a:link {
     max-width: 300px; 
 }
 #figmaLink {
-    color: blue;
+    color: #95A1F1;
 }
 @media (min-width: 768px) {
     
