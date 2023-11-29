@@ -239,7 +239,7 @@ function updateMapView(latitude, longitude, guessSubmitted) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const autoCompleteJS = new autoComplete({
     selector: "#userGuess",
     data: {
@@ -292,18 +292,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       }
     }
-    });
-    autoCompleteJS.input.addEventListener("selection", function (event) {
-      const feedback = event.detail;
-      autoCompleteJS.input.blur();
-      // Prepare User's Selected Value
-      const selection = feedback.selection.value[feedback.selection.key];
-      // Render selected choice to selection div
-      document.querySelector("#userGuess").innerHTML = selection;
-      // Replace Input value with the selected value
-      autoCompleteJS.input.value = selection;
-      // Console log autoComplete data feedback
-      
-    });
+  });
+  autoCompleteJS.input.addEventListener("selection", function (event) {
+    const feedback = event.detail;
+    autoCompleteJS.input.blur();
+    // Prepare User's Selected Value
+    const selection = feedback.selection.value[feedback.selection.key];
+    // Render selected choice to user guess 
+    document.querySelector("#userGuess").innerHTML = selection;
+    // Replace Input value with the selected value
+    autoCompleteJS.input.value = selection;
+
+  });
 });
 

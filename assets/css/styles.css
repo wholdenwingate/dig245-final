@@ -2,12 +2,17 @@
 #body {
     background-color: lightgrey;
 }
+
 #button {
     background-color: lightgrey;
 }
-#link1, #link2, #link3 {
+
+#link1,
+#link2,
+#link3 {
     padding-right: 10px;
 }
+
 #map {
     border-radius: 15px;
     height: 395px;
@@ -15,23 +20,31 @@
     justify-content: center;
     align-items: center;
 }
+
 #row1 {
     font-family: 'Raleway', sans-serif;
     border-radius: 25px;
     background-color: #95A1F1;
     color: black;
 }
-#row2, #game-container, #row3, #row4, #row5 {
+
+#row2,
+#game-container,
+#row3,
+#row4,
+#row5 {
     font-family: 'Brawler', serif;
 }
 
 #city1Img:hover,
 #city2Img:hover {
-    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
+
 .image-button {
     border-radius: 15px;
 }
+
 #cityImage {
     max-height: 395px;
     border-radius: 15px;
@@ -41,58 +54,73 @@
     margin-left: auto;
     margin-right: auto;
 }
-#city1Img, #city2Img {
+
+#city1Img,
+#city2Img {
     border-radius: 15px;
+    max-height: 395px;
 }
+
 #userGuess {
     border-radius: 5px;
     padding-bottom: 8px;
-    max-width: 250px; 
+    max-width: 250px;
 }
+
 a:link {
     text-decoration: none;
     color: black;
 }
+
 .custom-button {
-    width: auto; 
+    width: auto;
 }
+
 .short-input {
-    max-width: 300px; 
+    max-width: 300px;
 }
+
 #figmaLink {
     color: #95A1F1;
 }
+
 @media (min-width: 768px) {
-    
+
     .col-md-6 {
         flex: 0 0 auto;
         width: 100%;
     }
 }
+
 @media (max-width: 1200px) {
     #cityImage {
-        width: 100%; 
+        width: 100%;
     }
+
     #map {
         width: 100%;
     }
 }
+
 @media (max-width: 991px) {
     #row3 {
-        flex-direction: row; 
+        flex-direction: row;
     }
 
     .col-lg-5,
     .col-lg-7 {
-        width: 100%; 
+        width: 100%;
     }
+
     #cityImage {
         width: 100%;
     }
+
     #map {
         width: 100%;
     }
 }
+
 @media (min-width: 992px) {
     #cityImage {
         max-width: 100%;
@@ -101,14 +129,15 @@ a:link {
 
     #map {
         max-width: 50%;
-        height: 395px; 
+        height: 395px;
     }
+
     #row4 {
-        flex-direction: row; 
+        flex-direction: row;
     }
+
     #row4 .col-lg-6 {
-        flex: 0 0 50%; 
+        flex: 0 0 50%;
         max-width: 50%;
     }
 }
-

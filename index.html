@@ -17,7 +17,8 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.01.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.01.min.css">
 </head>
 
 <body id="body">
@@ -29,21 +30,27 @@
                     <div class="container">
                         <img src="assets/img/GWlogo.jpg" alt="Guess Where logo" class="navbar-brand">
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
                         </button>
                         <div class="collapse navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="index.html"><h4>Guess The City</h4></a>
+                                    <a class="nav-link" href="index.html">
+                                        <h4>Guess The City</h4>
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="higher-population.html"><h4>Higher Population</h4></a>
+                                    <a class="nav-link" href="higher-population.html">
+                                        <h4>Higher Population</h4>
+                                    </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="about.html"><h4>About</h4></a>
-                                </li> 
+                                    <a class="nav-link" href="about.html">
+                                        <h4>About</h4>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -75,7 +82,9 @@
                         <h2 class="mt-4" id="guess"><b>The City is:</b></h2>
                     </label>
                     <div class="autoComplete_wrapper">
-                        <input class="form-control short-input mb-3 mt-3 " spellcheck=false dir="ltr" autocorrect="off" autocomplete="off" autocapitalize="off" maxlength="2048" tabindex="1" type="text" id="userGuess">
+                        <input class="form-control short-input mb-3 mt-3 " spellcheck=false dir="ltr" autocorrect="off"
+                            autocomplete="off" autocapitalize="off" maxlength="2048" tabindex="1" type="text"
+                            id="userGuess">
                     </div>
                     <form>
                         <button id="beginButton" class="btn btn-dark mb-4 custom-button">Begin</button>
@@ -86,15 +95,18 @@
                     <h2 class=""><b>High Score:</b> <span id="highScore">0</span></h2>
                 </div>
             </div>
-        
+
             <div class="col-lg-8 col-md-7">
                 <div class="row" id="row4">
                     <div class="col-lg-6 col-md-6 order-lg-1 order-md-1 order-1 mb-4">
                         <div class="d-flex h-100 align-items-center justify-content-center">
-                            <img class="img-fluid" id="cityImage" src="https://d13k13wj6adfdf.cloudfront.net/urban_areas/kyoto-bc8c37d2f9.jpg" alt="City Image">
+                            <img class="img-fluid" id="cityImage"
+                                src="https://d13k13wj6adfdf.cloudfront.net/urban_areas/kyoto-bc8c37d2f9.jpg"
+                                alt="City Image">
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 mb-4 order-lg-2 order-md-2 order-2 align-items-center justify-content-center" id="map">
+                    <div class="col-lg-6 col-md-6 mb-4 order-lg-2 order-md-2 order-2 align-items-center justify-content-center"
+                        id="map">
                     </div>
                 </div>
             </div>
@@ -103,10 +115,11 @@
 
     <!-- load javascript after the page elements render -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-            crossorigin="anonymous"></script>
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
     <script src="assets/js/main.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
-    
+
 </body>
+
 </html>

@@ -1,15 +1,15 @@
 $(document).ready(function () {
-    let score = 0;
-    let highScore = localStorage.getItem('highScore') || 0;
+    let score1 = 0;
+    let highScore1 = localStorage.getItem('highScore1') || 0;
     let isGuessMade = false;
     function updateScoreDisplay() {
-        $("#score").html(`<strong>Score:</strong> ${score}`);
-        $("#highscore").html(`<strong>High Score:</strong> ${highScore}`);
+        $("#score1").html(`<strong>Score:</strong> ${score1}`);
+        $("#highscore1").html(`<strong>High Score:</strong> ${highScore1}`);
     }
     updateScoreDisplay();
     async function fetchRandomCities() {
         try {
-        
+
             $("#nextBtn").prop("disabled", true);
             isGuessMade = false;
 
@@ -28,7 +28,7 @@ $(document).ready(function () {
     async function fetchCityDetails(cityName, imgId) {
         let population;
         const citySlug = cityName.toLowerCase().replace(/\s+/g, '-').replace(/,/g, '');
-        
+
         try {
             const response = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/details/`);
             const data = await response.json();
@@ -41,7 +41,7 @@ $(document).ready(function () {
                 }
             }
 
-            const response2 = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/images/` );
+            const response2 = await fetch(`https://api.teleport.org/api/urban_areas/slug:${citySlug}/images/`);
             const data2 = await response2.json();
             const photos = data2.photos[0].image;
             const image = photos.mobile;
@@ -64,22 +64,22 @@ $(document).ready(function () {
     function handleUserGuess(population, imgId) {
         const otherImgId = imgId === "city1Img" ? "city2Img" : "city1Img";
         const otherPopulation = getPopulationFromOtherCity(otherImgId);
-        
-        if(!isNaN(otherPopulation)) {
+
+        if (!isNaN(otherPopulation)) {
             if (population > otherPopulation) {
                 alert("Correct!");
-                score++;
+                score1++;
             } else {
                 alert("Incorrect");
-                score = 0;
+                score1 = 0;
             }
         }
-        
-        highScore = Math.max(score, highScore);
 
-        $("#score").html(`<strong>Score:</strong> ${score}`);
-        $("#highscore").html(`<strong>High Score:</strong> ${Math.max(score, highScore)}`);
-        localStorage.setItem('highScore', highScore)
+        highScore1 = Math.max(score1, highScore1);
+
+        $("#score1").html(`<strong>Score:</strong> ${score1}`);
+        $("#highscore1").html(`<strong>High Score:</strong> ${Math.max(score1, highScore1)}`);
+        localStorage.setItem('highScore1', highScore1)
     }
 
     function getPopulationFromOtherCity(imgId) {
@@ -91,7 +91,7 @@ $(document).ready(function () {
         return shuffledArray.slice(0, count);
     }
 
-    $("#game-container").on('click', 'img', function() {
+    $("#game-container").on('click', 'img', function () {
         const imgId = $(this).attr('id');
         if (!isGuessMade) {
             isGuessMade = true;
@@ -99,15 +99,15 @@ $(document).ready(function () {
             handleUserGuess(population, imgId);
         }
     });
-    
+
     $("#clickToBeginBtn").click(function () {
         fetchRandomCities();
-        score = 0;
-        $("#score").html(`<strong>Score:</strong> ${score}`);
+        score1 = 0;
+        $("#score1").html(`<strong>Score:</strong> ${score1}`);
     });
     $("#nextBtn").click(function () {
         if (isGuessMade) {
-            fetchRandomCities(); 
+            fetchRandomCities();
         } else {
             alert("Please make a selection first")
         }
