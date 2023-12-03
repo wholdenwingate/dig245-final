@@ -13,10 +13,6 @@
     padding-right: 10px;
 }
 
-#navbar {
-    width: 100%;
-}
-
 #map {
     border-radius: 15px;
     height: 395px;
@@ -25,10 +21,12 @@
     align-items: center;
 }
 
-#row1 {
+#navbar {
     font-family: 'Raleway', sans-serif;
     background-color: #95A1F1;
     color: black;
+    opacity: 70%;
+    
 }
 
 #row2,
