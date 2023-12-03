@@ -13,6 +13,10 @@
     padding-right: 10px;
 }
 
+#navbar {
+    width: 100%;
+}
+
 #map {
     border-radius: 15px;
     height: 395px;
@@ -23,7 +27,6 @@
 
 #row1 {
     font-family: 'Raleway', sans-serif;
-    border-radius: 25px;
     background-color: #95A1F1;
     color: black;
 }
