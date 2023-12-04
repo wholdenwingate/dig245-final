@@ -9,7 +9,6 @@ $(document).ready(function () {
     updateScoreDisplay();
     async function fetchRandomCities() {
         try {
-
             $("#nextBtn").prop("disabled", true);
             isGuessMade = false;
 
@@ -55,6 +54,7 @@ $(document).ready(function () {
             $(cityLabelId).html(cityName);
 
             $("#nextBtn").prop("disabled", false);
+            
 
         } catch (error) {
             console.error(`Error fetching details for ${cityName}:`, error);
@@ -69,9 +69,13 @@ $(document).ready(function () {
             if (population > otherPopulation) {
                 alert("Correct!");
                 score1++;
+                $("#clickToBeginBtn").prop("disabled", true);
+                $("#nextBtn").prop("disabled", false);
             } else {
                 alert("Incorrect");
                 score1 = 0;
+                $("#clickToBeginBtn").prop("disabled", false);
+                $("#nextBtn").prop("disabled", true);
             }
         }
 
@@ -104,6 +108,7 @@ $(document).ready(function () {
         fetchRandomCities();
         score1 = 0;
         $("#score1").html(`<strong>Score:</strong> ${score1}`);
+        $("#nextBtn").prop("disabled", true);
     });
     $("#nextBtn").click(function () {
         if (isGuessMade) {
